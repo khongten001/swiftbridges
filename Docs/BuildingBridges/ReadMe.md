@@ -165,3 +165,5 @@ Once the framework has been successfully built, an import for Delphi can be crea
 A convenient way to do this is using [Octoid](https://github.com/Embarcadero/octoid). Please ensure that you read the section on [Transforming 3rd party frameworks](https://github.com/Embarcadero/octoid?tab=readme-ov-file#transforming-3rd-party-frameworks)
 
 Otherwise, you might choose to do it by hand (ouch! again)
+
+NOTE: AI can also be helpful here, however at present it's likely to make even more mistakes. I'm sure this will change over time
