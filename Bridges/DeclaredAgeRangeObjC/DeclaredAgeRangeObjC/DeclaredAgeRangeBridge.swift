@@ -102,6 +102,7 @@ public final class ParentalControlsSwift: NSObject {
 
     nonisolated(unsafe) public static let communicationLimits = ParentalControlsSwift(rawValue: AgeRangeService.ParentalControls.communicationLimits.rawValue)
 
+    @available(iOS 26.2, *)
     nonisolated(unsafe) public static let significantAppChangeApprovalRequired = ParentalControlsSwift(rawValue: AgeRangeService.ParentalControls.significantAppChangeApprovalRequired.rawValue)
 }
 
