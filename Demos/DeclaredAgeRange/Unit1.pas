@@ -31,6 +31,7 @@ implementation
 {$R *.fmx}
 
 uses
+  Macapi.Helpers,
   iOSapi.Helpers;
 
 type
@@ -131,23 +132,27 @@ procedure TForm1.RequestAgeRangeCompletionHandler(response: AgeRangeResponseOC; 
 var
   LDeclaration: TAgeRangeDeclaration;
 begin
-  // Beware #1: If declinedSharing is True, response.sharedRange will be NIL!
-  if not response.declinedSharing then
+  if response <> nil then
   begin
-    if response.sharedRange.activeParentalControls.communicationLimits then
-      Memo1.Lines.Add('Communication limits are imposed');
-    if response.sharedRange.activeParentalControls.significantAppChangeApprovalRequired then
-      Memo1.Lines.Add('Approval is required for significant app changes');
-    LDeclaration := GetAgeRangeDeclaration(response.sharedRange.ageRangeDeclarationType);
-    Memo1.Lines.Add(cAgeRangeDeclarationCaptions[LDeclaration]);
-    // Beware #2: If there is no upper bound, response.sharedRange.upperBound will be NIL!
-    if response.sharedRange.upperBound <> nil then
-      Memo1.Lines.Add(Format('Age Range - Lower: %d, Upper: %d', [response.sharedRange.lowerBound.integerValue, response.sharedRange.upperBound.integerValue]))
+    if not response.declinedSharing then
+    begin
+      if response.sharedRange.activeParentalControls.communicationLimits then
+        Memo1.Lines.Add('Communication limits are imposed');
+      if response.sharedRange.activeParentalControls.significantAppChangeApprovalRequired then
+        Memo1.Lines.Add('Approval is required for significant app changes');
+      LDeclaration := GetAgeRangeDeclaration(response.sharedRange.ageRangeDeclarationType);
+      Memo1.Lines.Add(cAgeRangeDeclarationCaptions[LDeclaration]);
+      // Beware #2: If there is no upper bound, response.sharedRange.upperBound will be NIL!
+      if response.sharedRange.upperBound <> nil then
+        Memo1.Lines.Add(Format('Age Range - Lower: %d, Upper: %d', [response.sharedRange.lowerBound.integerValue, response.sharedRange.upperBound.integerValue]))
+      else
+        Memo1.Lines.Add(Format('Age Range - %d+', [response.sharedRange.lowerBound.integerValue]));
+    end
     else
-      Memo1.Lines.Add(Format('Age Range - %d+', [response.sharedRange.lowerBound.integerValue]));
-  end
-  else
-    Memo1.Lines.Add('The user declined sharing their age range');
+      Memo1.Lines.Add('The user declined sharing their age range');
+  end;
+  if error <> nil then
+    Memo1.Lines.Add(Format('Error: %s', [NSStrToStr(error.localizedDescription)]));
 end;
 
 procedure TForm1.DoRequestAgeRange;
